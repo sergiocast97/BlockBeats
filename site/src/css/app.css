@@ -1,0 +1,59 @@
+body {
+    margin: 0;
+    font-family: stratos, sans-serif;
+    height: 100vh;
+    background-color: #2A2828;
+}
+
+header {
+    height: 60px;
+    background: #2A2828;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0px 3px 6px #00000029;
+}
+
+header .user_area {
+    display: flex;
+    align-items: center;
+}
+
+header .user_area .username {
+    font-size: 16px;
+    color: #FFF;
+}
+
+header .user_area img {
+    width: 34px;
+    height: auto;
+    margin: 13px;
+}
+
+section {
+    padding: 25px 50px;
+}
+
+.blocks {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.block {
+    border-radius: 5px;
+    background-color: #C51010;
+    color: #FFF;
+    width: 150px;
+    height: 35px;
+    margin-right: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tracks {
+    width: 100%;
+    height: 200px;
+    border-radius: 15px;
+    box-shadow: inset 5px 5px 10px #111010, 
+    inset -5px -5px 10px #434040;
+}

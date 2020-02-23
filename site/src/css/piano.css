@@ -1,13 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
 
-.piano {
+#piano {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: rgb(255,255,255);
-    background: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(230,230,230,1) 100%);
     margin: 0;
+    padding: 0;
 }
 
 ul {
@@ -18,14 +16,14 @@ ul {
 ul .key {
     position: relative;
     width: 60px;
-    height: 180px;
+    height: 200px;
     border: 1px solid #DDD;
     border-right: none;
     background: #EEE;
     border-radius: 5px;
 
     /* Shadow */
-    box-shadow: -2px -2px 5px #FFF, 2px 2px 5px #666;
+    box-shadow: 2px 2px 5px #666;
 
     cursor: pointer;
     display: flex;
@@ -45,7 +43,7 @@ ul .black-key {
     border-radius: 5px;
 
     /* Shadow */
-    box-shadow: -2px -2px 5px #FFF, 2px 2px 5px #666;
+    box-shadow: 2px 2px 5px #666;
    
     z-index: 5;
     display: flex;
