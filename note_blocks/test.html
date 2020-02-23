@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/blocks-style.css">
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+            <script src="node_modules/tone/build/Tone.js"></script>
+        <script src="js/tone-track.js"></script>
+        
+        <script>
+            
+            // Piano Notes
+            var piano = ["C","C#","D","D#","E","F","F#","G","G#","A","A#","B"];
+            
+            $(function() {
+                $( ".draggable" ).draggable({
+                    connectToSortable: "#snaptrack",
+                    helper: "clone",
+                    revert: "invalid"
+                });
+                
+                $(".dragchord").draggable({
+                    connectToSortable: "#chordtrack",
+                    helper: "clone",
+                    revert: "invalid"
+                });
+                
+                $(".resizable").resizable({
+                    grid: 50
+                });
+                
+                
+                $("#snaptrack").sortable({
+                    revert: true,
+                    placeholder: "ui-state-highlight",
+                    receive: function(event, ui) {
+                        x = ui.item[0].dataset.note;
+                        notes.push(x);
+                        console.log(notes);
+                    }
+                });
+                
+                var toneTime = 0;
+                
+                $("#chordtrack").sortable({
+                    revert: true,
+                    placeholder: "ui-state-highlight",
+                    receive: function(event,ui) {
+                        x = ui.item[0].dataset.note;
+                        
+                        n = x.split("-")[0];
+                        m = x.split("-")[1];
+                        pos = piano.indexOf(n);
+                        chord = [];
+                        chord.push(n + "4");
+                        if (m === "Major") {
+                            nn = pos+4;
+                        }
+                        else {
+                            nn = pos+3;
+                        }                            
+                        if (nn > piano.length-1) {
+                            chord.push(piano[nn-piano.length] + "5")
+                        } else {
+                            chord.push(piano[nn] + "4")
+                        }
+                        nnn = pos + 7;
+                        if (nnn > piano.length-1) {
+                            chord.push(piano[nnn-piano.length] + "5")
+                        } else {
+                            chord.push(piano[nnn] + "4")
+                        }
+                        chords.push([chord,toneTime]);
+                        
+                        toneTime = toneTime + "2n";
+                        
+                        console.log(chords);
+                    }
+                });
+                
+                
+                
+                const synth = new Tone.Synth({
+                    oscillator: {
+                        type: "sine"
+                    }
+                }).toMaster();
+                
+                const poly = new Tone.PolySynth(6,Tone.Synth,{
+                    oscillator: {
+                        type: "sine"
+                    }
+                }).toMaster();
+                
+                var notes = [];
+                var chords = [];
+                
+                var pianoSynth = new Tone.PolySynth(4, Tone.Synth, {
+                    "volume" : -8,
+                    "oscillator" : {
+                        "partials" : [1, 2, 5],
+                    },
+                    "portamento" : 0.005
+                }).toMaster();
+                
+                document.querySelector('#play').addEventListener('click', async() => {
+//                    const polyPart = new Tone.Sequence(
+//                        function(time,note) {
+//                            poly.triggerAttackRelease(note,"10hz",time)
+//                        },
+//                        chords,
+//                        "4n"
+//                    );
+                    const synthPart = new Tone.Sequence(
+                        function(time,note) {
+                            synth.triggerAttackRelease(note,"2n",time)
+                        },
+                        notes
+                    );
+                    polyPart.start();
+//                    synthPart.start();
+//                    Tone.Transport.start();
+//                    poly.triggerAttackRelease(chords[0],"4n");
+//                    poly.triggerAttackRelease(chords[1],"4n");
+//                    poly.triggerAttackRelease(chords[2],"4n");
+//                    poly.triggerAttackRelease(chords[3],"4n");
+                    var chordPart = new Tone.Part(function(time, chord){
+                        pianoSynth.triggerAttackRelease(chord, "2n", time);
+                    }, chords ).start(0);
+//
+                    chordPart.loop = true;
+                    chordPart.loopStart = "0:0";
+                    chordPart.loopEnd = "2:0";
+                    
+                    chordPart.start();
+//
+//                    var tempo = 120;
+//                    Tone.Transport.bpm.value = tempo;   
+//                    Tone.Transport.start("+0.1");
+                    Tone.Transport.start();
+                });
+            });
+                
+        </script>
+        
+    </head>
+    <body>
+        <section id="blocks">
+            <p>Note Blocks</p>
+            <div class="block draggable" data-note="C4">
+                <p class="note">C4</p>
+            </div>
+            <div class="block draggable" data-note="D4">
+                <p class="note">D4</p>
+            </div>
+            <div class="block draggable" data-note="E4">
+                <p class="note">E4</p>
+            </div>
+            <div class="block draggable" data-note="F4">
+                <p class="note">F4</p>
+            </div>
+            <div class="block draggable" data-note="G4">
+                <p class="note">G4</p>
+            </div>
+            <div class="block draggable" data-note="A4">
+                <p class="note">B5</p>
+            </div>
+            <div class="block dragchord" data-note="C-Major">
+                <p class="chord">C Major</p>
+            </div>
+            <div class="block dragchord" data-note="D-Major">
+                <p class="chord">D Major</p>
+            </div>
+        </section>
+        
+        
+        <section id="tracks">
+            <p>Block Tracks</p>
+            <div id="snaptrack">
+                
+            </div>
+            <div id="chordtrack">
+            </div>
+        </section>
+        
+        <button id="play">
+            Play
+        </button>
+        
+    </body>
+    
+    <script>
+    </script>
+    
+    
+    
+</html>

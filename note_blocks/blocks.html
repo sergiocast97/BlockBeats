@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="css/blocks-style.css">
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+            <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        
+            <script src="node_modules/tone/build/Tone.js"></script>
+        <script src="js/tone-track.js"></script>
+        
+        <script>
+            $(function() {
+                $( ".draggable" ).draggable({
+                    connectToSortable: "#snaptrack",
+                    helper: "clone",
+                    revert: "invalid"
+                });
+                
+                $(".resizable").resizable({
+                    grid: 50
+                });
+                
+                
+                $("#snaptrack").sortable({
+                    revert: true,
+                    placeholder: "ui-state-highlight"
+                });
+                
+                
+                $('.droppable').droppable({
+                   drop: function(event, ui) {
+                       $(this).find("div:first").removeAttr("style");
+                   }
+                });
+                
+                const synth = new Tone.Synth().toMaster();
+                const synth2 = new Tone.Synth().toMaster();
+                
+                const notes = ["C3",["C3","E3","G3"],["F3","A4","G4"],"C2"];
+                const notes2 = ["C3","C3","C3","C3"];
+                
+                const chords = [["C4","E4","G4"],["D4","F#4","A4"]];
+                
+                const synthPart = new Tone.Sequence(
+                    function(time,note) {
+                        synth.triggerAttackRelease(note, "10hz", time)
+                    },
+                    notes,
+                    "4n"
+                );
+                
+                const synthPart2 = new Tone.Sequence(
+                    function(time,note) {
+                        synth2.triggerAttackRelease(note, "10hz", time)
+                    },
+                    notes2,
+                    "4n"
+                );
+                
+                const poly = new Tone.PolySynth(6,Tone.Synth,{
+                    oscillator: {
+                        type: "sine"
+                    }
+                }).toMaster();
+                
+                var chord = new Tone.Event(function(time,chord){
+                    poly.triggerAttackRelease(chord,"8n",time)
+                },chords);
+                chord.start();
+//                chord.loop = 8;
+//                chord.loopEnd = "1m";
+                
+//                synthPart.start();
+//                synthPart2.start();
+                
+                document.querySelector('button').addEventListener('click', async() => {
+                    Tone.Transport.start();
+//                    chord.start();
+                });
+                
+                
+            });
+        </script>
+        
+    </head>
+    <body>
+        <section id="blocks">
+            <p>Note Blocks</p>
+            <div class="block draggable">
+                <p class="chord">C4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord">G3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord">A2</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord">C3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord">D5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord">F4</p>
+            </div>
+        </section>
+        
+        <section id="tracks">
+            <p>Block Tracks</p>
+            <div id="snaptrack" >
+                
+            </div>
+        </section>
+        
+        <button id="play">
+            Play
+        </button>
+        
+    </body>
+    
+    <script>
+        
+    </script>
+    
+    
+    
+</html>
