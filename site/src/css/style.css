@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    height: 100vh;
+}
+
+/* Header */
+header {
+    /* Position */
+    padding: 5px 20px;
+    /* Look */
+    background: #DDD;
+    /* Inner */
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul {
+    display: flex;
+    justify-content: space-between;
+}
+
+header nav ul li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 10px;
+}
+
+/* Main */
+
+section {
+    padding: 50px;
+}
+
+.hero {
+    display: flex;
+}
+
+.hero .info_area {
+    display: flex;
+    flex-direction: column;
+}
+
+.hero img {
+    width: 50%;
+}
+
+/* Members area */
+.members {
+    display: flex;
+    justify-content: space-between;
+}
+
+.members .member {
+    width: 30%;
+}
+
+.members .member img {
+    height: 100px;
+    width: 100px;
+    object-fit: cover;
+    border-radius: 100%;
+}
+
+/* Contact Area */
+.contact_area {
+    display: flex;
+    justify-content: space-between;
+}
+
+.contact_area .contact_form {
+    width: 50%;
+}
+
+.contact_area .contact_form input {
+    width: 48%;
+}
+
+.contact_area .contact_form #enquiry {
+    width: 100%;
+}
+
+/* Footer */
+footer {
+    padding: 50px;
+    background-color: #999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+footer .footer_nav {
+    display: flex;
+    justify-content: space-between;
+}
+
+footer .footer_nav li {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 10px;
+}
+
+/* Login */
+.login_page {
+    height: 100%;
+    background-color: #DDD;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login_page .login_box {
+    display: flex;
+    flex-direction: column;
+}
