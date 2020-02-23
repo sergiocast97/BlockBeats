@@ -1,0 +1,13 @@
+
+.chord {
+    text-align: center;
+}
+
+#tracktable td {
+    border: 2px gray
+        solid;
+    border-collapse: collapse;
+    width: 60px;
+    height: 35px;
+    justify-content: center;
+}

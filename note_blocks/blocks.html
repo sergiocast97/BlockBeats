@@ -8,11 +8,12 @@
         
             <script src="node_modules/tone/build/Tone.js"></script>
         <script src="js/tone-track.js"></script>
+        <script src="js/simpleTones.js"></script>
         
         <script>
             $(function() {
                 $( ".draggable" ).draggable({
-                    connectToSortable: "#snaptrack",
+                    connectToSortable: "#tracktable td",
                     helper: "clone",
                     revert: "invalid"
                 });
@@ -34,29 +35,106 @@
                    }
                 });
                 
+                
+                
+                $("#tracktable td").sortable({
+                    revert: true,
+                    placeholder: "ui-state-highlight"
+                })
+                
                 const synth = new Tone.Synth().toMaster();
                 const synth2 = new Tone.Synth().toMaster();
+                const synth3 = new Tone.Synth().toMaster();
                 
-                const notes = ["C3",["C3","E3","G3"],["F3","A4","G4"],"C2"];
-                const notes2 = ["C3","C3","C3","C3"];
+//                const notes = ["C3",["C3","E3","G3"],["F3","A4","G4"],"C2"];
+//                const notes2 = ["C3","C3","C3","C3"];
                 
-                const chords = [["C4","E4","G4"],["D4","F#4","A4"]];
+                var notes = [];
+                var notes2 = [];
+                var notes3 = [];
                 
-                const synthPart = new Tone.Sequence(
-                    function(time,note) {
-                        synth.triggerAttackRelease(note, "10hz", time)
-                    },
-                    notes,
-                    "4n"
-                );
+                var chords = ["C","D","Cm","D"];
                 
-                const synthPart2 = new Tone.Sequence(
-                    function(time,note) {
-                        synth2.triggerAttackRelease(note, "10hz", time)
-                    },
-                    notes2,
-                    "4n"
-                );
+                
+                function getTracks() {
+                   $('#track1 td').each(function() { 
+                       note = $(this).find('p').html();
+                       if (note != undefined) {
+                           notes.push(note);
+                       }
+                        else {
+                            notes.push(null);
+                        }
+                   });
+                    $('#track2 td').each(function() { 
+                       note = $(this).find('p').html();
+                       if (note != undefined) {
+                           notes2.push(note);
+                       }
+                        else {
+                            notes2.push(null);
+                        }
+                   });
+                    $('#track3 td').each(function() { 
+                       note = $(this).find('p').html();
+                       if (note != undefined) {
+                           notes3.push(note);
+                       }
+                        else {
+                            notes3.push(null);
+                        }
+                   });
+                    console.log(notes);
+                    console.log(notes2);
+                    console.log(notes3);
+                };
+                
+                
+                
+                function startTracks(beat) {
+                    const synthPart = new Tone.Sequence(
+                        function(time,note) {
+                            synth.triggerAttackRelease(note, "4n", time)
+                        },
+                        notes,
+                        beat
+                    );
+
+                    const synthPart2 = new Tone.Sequence(
+                        function(time,note) {
+                            synth2.triggerAttackRelease(note, "4n", time)
+                        },
+                        notes2,
+                        beat
+                    );
+
+                    const synthPart3 = new Tone.Sequence(
+                        function(time,note) {
+                            synth3.triggerAttackRelease(note, "4n", time)
+                        },
+                        notes3,
+                        beat
+                    );
+                    
+                    synthPart.start();
+                    synthPart2.start();
+                    synthPart3.start();
+                
+                }
+                
+                
+                
+                function playArray(chs,interval) {
+                    time = 0;
+                    console.log(chs);
+                    chs.forEach(function(item) {
+                        setTimeout(function() {
+                            playTone(item,"sine",2);
+                            console.log(item);
+                        },time);
+                        time = time + interval;
+                    });
+                }
                 
                 const poly = new Tone.PolySynth(6,Tone.Synth,{
                     oscillator: {
@@ -67,16 +145,45 @@
                 var chord = new Tone.Event(function(time,chord){
                     poly.triggerAttackRelease(chord,"8n",time)
                 },chords);
-                chord.start();
+//                chord.start();
 //                chord.loop = 8;
 //                chord.loopEnd = "1m";
                 
-//                synthPart.start();
-//                synthPart2.start();
-                
-                document.querySelector('button').addEventListener('click', async() => {
+//                
+                document.querySelector('#play').addEventListener('click', async() => {
+//                    Tone.Transport.start();
+//                   playArray(chords,2000);
+                    
+                    getTracks();
+                    startTracks("8n");
+                    Tone.Transport.loopEnd = '0.5m';
+                    Tone.Transport.loop = true;
                     Tone.Transport.start();
+//                    Tone.Transport.stop();
+                    
 //                    chord.start();
+//                    playTone(chord["C"]);
+//                    playTone("C","sine",2);
+//                    setTimeout(function() {
+//                        playTone("D","sine",2);
+//                    },2000);
+                });
+                
+                document.querySelector('#clear').addEventListener('click', async() => {
+                    $('#track1 td').each(function() { 
+                       $(this).html("");
+                   });
+                    $('#track2 td').each(function() { 
+                       $(this).html("");
+                   });
+                    $('#track3 td').each(function() { 
+                       $(this).html("");
+                   });
+                    Tone.Transport.stop();
+                });
+                
+                document.querySelector('#stop').addEventListener('click', async() => {
+                    Tone.Transport.stop();
                 });
                 
                 
@@ -87,24 +194,108 @@
     <body>
         <section id="blocks">
             <p>Note Blocks</p>
+            
             <div class="block draggable">
-                <p class="chord">C4</p>
+                <p class="chord c2">C2</p>
             </div>
             <div class="block draggable">
-                <p class="chord">G3</p>
+                <p class="chord c2">D2</p>
             </div>
             <div class="block draggable">
-                <p class="chord">A2</p>
+                <p class="chord c2">E2</p>
             </div>
             <div class="block draggable">
-                <p class="chord">C3</p>
+                <p class="chord c2">F2</p>
             </div>
             <div class="block draggable">
-                <p class="chord">D5</p>
+                <p class="chord c2">G2</p>
             </div>
             <div class="block draggable">
-                <p class="chord">F4</p>
+                <p class="chord c2">A2</p>
             </div>
+            <div class="block draggable">
+                <p class="chord c2">B2</p>
+            </div>
+            
+            <div class="block">
+                <p class="chord"></p>
+            </div>
+            
+            <div class="block draggable">
+                <p class="chord c3">C3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">D3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">E3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">F3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">G3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">A3</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c3">B3</p>
+            </div>
+            
+            <div class="block">
+                <p class="chord"></p>
+            </div>
+            
+            <div class="block draggable">
+                <p class="chord c4">C4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">D4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">E4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">F4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">G4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">A4</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c4">B4</p>
+            </div>
+            
+            <div class="block">
+                <p class="chord"></p>
+            </div>
+            
+            <div class="block draggable">
+                <p class="chord c5">C5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">D5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">E5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">F5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">G5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">A5</p>
+            </div>
+            <div class="block draggable">
+                <p class="chord c5">B5</p>
+            </div>
+            
+            
         </section>
         
         <section id="tracks">
@@ -112,10 +303,48 @@
             <div id="snaptrack" >
                 
             </div>
+            
+            <table id="tracktable">
+                <tr id="track1">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="track2">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="track3">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
         </section>
         
         <button id="play">
             Play
+        </button>
+        
+        <button id="stop">
+            Stop
+        </button>
+        
+        <button id="clear">
+            Clear
         </button>
         
     </body>

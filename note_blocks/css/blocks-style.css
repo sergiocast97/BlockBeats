@@ -10,7 +10,7 @@
     text-decoration: none;
     border: none;
     display: inline-block;
-    padding: 5px 10px;
+/*    padding: 5px 10px;*/
 }
 
 #tracks {
@@ -26,9 +26,28 @@
 }
 
 .chord {
-    background-color: mistyrose;
+/*    background-color: mistyrose;*/
     margin: 5px;
-    padding: 10px;
+    padding: 5px 10px;
+    width: 40px;
+    text-align: center;
+    border-radius: 15px;
+}
+
+.c2 {
+    background-color: palevioletred
+}
+
+.c3 {
+    background-color: mediumvioletred
+}
+
+.c4 {
+    background-color: orangered
+}
+
+.c5 {
+    background-color: pink
 }
 
 #note {
@@ -46,7 +65,7 @@
 }
 
 .ui-state-highlight {
-    height: 3em;
+    height: 2em;
     line-height: 1.2em;
     width: 0.5em;
     background-color: aquamarine !important;
@@ -55,4 +74,15 @@
 #chordtrack {
     background-color: palegoldenrod;
     height: 200px;
+}
+
+#tracktable {
+    background-color: azure;
+    
+}
+
+#tracktable td {
+    background-color: aquamarine;
+    width: 60px;
+    height: 30px;
 }

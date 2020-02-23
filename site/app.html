@@ -8,6 +8,170 @@
     <link rel="stylesheet" href="src/css/app.css">
     <link rel="stylesheet" href="src/css/piano.css">
     <link rel="stylesheet" href="src/css/sidenav.css">
+    <link rel="stylesheet" href="src/css/blocks.css">
+    
+<!--    <link rel="stylesheet" type="text/css" href="../note_blocks/css/blocks-style.css">-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<!--    <script src="../note_blocks/node_modules/tone/build/Tone.js"></script>-->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.35/Tone.js"></script>
+<!--    <script src="src/js/blocks.js"></script>-->
+    <script>
+        $(function() {
+    $( ".draggable" ).draggable({
+        connectToSortable: "#tracktable td",
+        helper: "clone",
+        revert: "invalid"
+    });
+
+    $(".resizable").resizable({
+        grid: 50
+    });
+
+
+    $("#snaptrack").sortable({
+        revert: true,
+        placeholder: "ui-state-highlight"
+    });
+
+
+    $('.droppable').droppable({
+       drop: function(event, ui) {
+           $(this).find("div:first").removeAttr("style");
+       }
+    });
+                
+                
+                
+    $("#tracktable td").sortable({
+        revert: true,
+        placeholder: "ui-state-highlight"
+    });
+                
+    const synth1 = new Tone.Synth().toMaster();
+    const synth2 = new Tone.Synth().toMaster();
+    const synth3 = new Tone.Synth().toMaster();
+                
+    var notes = [];
+    var notes2 = [];
+    var notes3 = [];
+                
+    
+                
+                
+    function getTracks() {
+        
+        notes = [];
+        notes2 = [];
+        notes3 = [];
+        
+       $('#track1 td').each(function() { 
+           note = $(this).find('p').html();
+           if (note != undefined) {
+               notes.push(note);
+           }
+            else {
+                notes.push(null);
+            }
+       });
+        $('#track2 td').each(function() { 
+           note = $(this).find('p').html();
+           if (note != undefined) {
+               notes2.push(note);
+           }
+            else {
+                notes2.push(null);
+            }
+       });
+        $('#track3 td').each(function() { 
+           note = $(this).find('p').html();
+           if (note != undefined) {
+               notes3.push(note);
+           }
+            else {
+                notes3.push(null);
+            }
+       });
+        console.log(notes);
+        console.log(notes2);
+        console.log(notes3);
+    };
+                
+                
+                
+    function startTracks() {
+        const synthPart1 = new Tone.Sequence(
+            function(time,note) {
+                synth1.triggerAttackRelease(note, "4n", time)
+            },
+            notes,
+            "4n"
+        );
+
+        const synthPart2 = new Tone.Sequence(
+            function(time,note) {
+                synth2.triggerAttackRelease(note, "4n", time)
+            },
+            notes2,
+            "4n"
+        );
+
+        const synthPart3 = new Tone.Sequence(
+            function(time,note) {
+                synth3.triggerAttackRelease(note, "4n", time)
+            },
+            notes3,
+            "4n"
+        );
+
+        synthPart1.start();
+        synthPart2.start();
+        synthPart3.start();
+
+    };
+                
+                
+                
+                
+                
+                
+    document.querySelector('#play').addEventListener('click', async() => {
+
+        getTracks();
+        startTracks();
+//        Tone.Transport.loopEnd = '0.5m';
+//        Tone.Transport.loop = true;
+        Tone.Transport.start();
+        Tone.start();
+
+    });
+                
+    document.querySelector('#clear').addEventListener('click', async() => {
+        $('#track1 td').each(function() { 
+           $(this).html("");
+       });
+        $('#track2 td').each(function() { 
+           $(this).html("");
+       });
+        $('#track3 td').each(function() { 
+           $(this).html("");
+       });
+        Tone.Transport.stop();
+    });
+                
+    document.querySelector('#stop').addEventListener('click', async() => {
+        Tone.Transport.stop();
+    });
+
+                
+});
+
+    </script>
+    
+    
 </head>
 <body>
 
@@ -98,23 +262,159 @@
         </section>
 
         <section class="block_area">
+            
             <div class="blocks">
-                <div class="block">Note</div>
-                <div class="block">Note</div>
+                <div class="block draggable">
+                    <p class="chord c3">C3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">D3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">E3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">F3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">G3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">A3</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c3">B3</p>
+                </div>
             </div>
+            
+            <div class="blocks">
+                <div class="block draggable">
+                    <p class="chord c4">C4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">D4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">E4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">F4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">G4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">A4</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c4">B4</p>
+                </div>
+            </div>
+                
+            <div class="blocks">
+                <div class="block draggable">
+                <p class="chord c5">C5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">D5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">E5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">F5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">G5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">A5</p>
+                </div>
+                <div class="block draggable">
+                    <p class="chord c5">B5</p>
+                </div>
+            </div>
+            
         </section>
 
         <section class="tracks_area">
             <div class="tracks">
-
+                <table id="tracktable">
+                <tr id="track1">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="track2">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="track3">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
             </div>
+        </section>
+        
+        <section id="buttons">
+            <button id="play">
+                Play
+            </button>
+
+            <button id="stop">
+                Stop
+            </button>
+
+            <button id="clear">
+                Clear
+            </button>
         </section>
 
     </main>
 
     <!-- Javascript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.35/Tone.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.35/Tone.js"></script>-->
     <script src="src/js/piano.js"></script>
     <script src="src/js/sidenav.js"></script>
+
 </body>
 </html>

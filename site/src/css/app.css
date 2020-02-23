@@ -36,15 +36,17 @@ section {
 .blocks {
     display: flex;
     flex-wrap: wrap;
+    margin-bottom: 5px;
+    justify-content: center;
 }
 
 .block {
     border-radius: 5px;
     background-color: #C51010;
     color: #FFF;
-    width: 150px;
+    width: 50px;
     height: 35px;
-    margin-right: 40px;
+    margin: 0px 15px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,4 +58,20 @@ section {
     border-radius: 15px;
     box-shadow: inset 5px 5px 10px #111010, 
     inset -5px -5px 10px #434040;
+}
+#tracktable {
+    width: 100%;
+}
+
+#buttons button {
+    background-color: #C51010;
+    color: #FFF;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+#clear {
+    float: right;
 }
